@@ -1,62 +1,94 @@
-// components/Sidebar.tsx
-'use client';
+"use client";
 
-import Link from 'next/link';
+import { FaChartPie, FaCoins, FaWallet, FaStar, FaFire, FaLeaf,  FaChartLine, FaQuestionCircle, FaLink, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { MdInsights, MdNotifications } from "react-icons/md";
+import { AiOutlineRobot } from "react-icons/ai";
+import { BsGraphUpArrow } from "react-icons/bs";
+import { motion } from "framer-motion";
+import { itemVariants,  containerVariants} from "../lib/Fonction";
+import Link from "next/link";
 
-const Sidebar = () => {
+
+type SidebarProps = {
+  active: string;
+  onSelect: (name: string) => void;
+};
+export default function Sidebar({ active, onSelect }: SidebarProps)  {
+
+
   const menuItems = [
-    { name: 'Home', icon: '🏠', active: true },
-    { name: 'AI Signs', icon: '🤖' },
-    { name: 'Smart Money', icon: '💰' },
-    { name: 'Profiler', icon: '📊' },
-    { name: 'Tokens', icon: '🪙', new: true },
-    { name: 'Hot Contracts', icon: '🔥' },
-    { name: 'Insights', icon: '💡' },
-    { name: 'Stake', icon: '🌱', new: true },
-    { name: 'Portfolio', icon: '💼' },
-    { name: 'Smart Segments', icon: '🧠' },
-    { name: 'Watchlist', icon: '⭐' },
-    { name: 'Chains', icon: '🔗' },
+    { name: "Dashboard", icon: <FaChartPie />, href: "/" },
+    { name: "Prediction", icon: <FaChartLine />, href: "/Prediction" },
+    { name: "Wallet", icon: <BsGraphUpArrow />, href: "/smart-money" },
+    { name: "Aide", icon: <FaQuestionCircle  />, href: "/Aide" },
+      { name: "Notifications", icon: <MdNotifications />, href: "/notifications" },
+    { name: "Profile", icon: <FaUser />, href: "/Profil" },
+    { name: "Settings", icon: <FaCog />, href: "/Settings" },
+    { name: "Logout", icon: <FaSignOutAlt />, href: "/" },
+
+  ];
+  const getItemClasses = (item) => {
+    return `w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 
+      ${active === item.name 
+        ? "bg-white/20 text-[#5686FE] border border-[#5686FE]" 
+        : "hover:bg-[#5686FE]/10 hover:text-[#5686FE]"}`;
+  };
+
+  const userItems = [
+  
   ];
 
   return (
-    <aside className="w-64 bg-[#142636] p-6 hidden md:block">
+    <motion.aside className="h-screen w-64 bg-white backdrop-blur-md text-gray-200   flex flex-col dark:bg-black "
+      variants={containerVariants}
+      initial="initial"
+      animate="animate"
+>
       {/* Logo */}
-      <div className="flex items-center space-x-2 mb-12">
-        <div className="w-8 h-8 rounded-md bg-green-500"></div>
-        <span className="text-white text-xl font-bold">PREDICTINVEST </span>
-      </div>
+      <motion.div className="flex items-center justify-center h-20 border-b border-[#5686FE] bg-white dark:bg-[#142636]" variants={containerVariants}>
+        <span className="text-[#5686FE] text-2xl font-bold">PREDICTINVEST</span>
+      </motion.div>
 
-      {/* Navigation */}
-      <nav>
-        <ul>
-          {menuItems.map((item) => (
-            <li key={item.name} className="mb-2">
-              <Link
-                href="#"
-                className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#203445] transition-colors ${item.active ? 'bg-[#203445] text-green-500' : ''}`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span>{item.name}</span>
-                {item.new && (
-                  <span className="ml-auto text-xs bg-green-500 text-black px-2 py-0.5 rounded-full font-bold">
-                    NEW
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Menu principal */}
+   <motion.nav className="flex-1 px-4 py-6 space-y-2 text-gray-400 bg-white dark:bg-[radial-gradient(at_top_left,_#5686FE_1%,_#142636_60%,_#142636_20%)]" variants={containerVariants} initial="initial" 
+  animate="animate">
+      {menuItems.map((item) => {
+        
+        // La condition clé : Si l'élément est 'Logout', on utilise <Link>
+        if (item.name === "Logout") {
+          return (
+            // Utilisation du composant Link pour la navigation Next.js
+           <motion.div key={item.name} variants={itemVariants}>
+            <Link 
+              
+              href={item.href} // Chemin d'URL pour la déconnexion
+              className={getItemClasses(item)}
+               // Applique les styles
+            >
+              <span className="text-lg">{item.icon}</span>
+              <span className="text-sm font-medium">{item.name}</span>
+            </Link>
+          </motion.div>
+          );
+        }
 
-      <div className="mt-8 pt-6 border-t border-gray-700">
-        <a href="#" className="flex items-center space-x-2 p-3 rounded-lg hover:bg-[#203445] transition-colors">
-          <span className="text-2xl">+</span>
-          <span>Add a section</span>
-        </a>
-      </div>
-    </aside>
+        // Pour tous les autres éléments (Dashboard, Profile), on utilise un <button>
+        // pour déclencher le changement de contenu local via `onSelect`.
+        return (
+          <motion.button
+            key={item.name}
+            onClick={() => onSelect(item.name)} 
+            className={getItemClasses(item)}
+            variants={itemVariants} // Applique les styles
+          >
+            <span className="text-lg">{item.icon}</span>
+            <span className="text-sm font-medium">{item.name}</span>
+          </motion.button>
+        );
+      })}
+    </motion.nav>
+       
+
+    </motion.aside>
   );
-};
-
-export default Sidebar;
+}

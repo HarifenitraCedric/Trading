@@ -1,141 +1,154 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-export default function Home() {
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Empêche le rechargement de la page par défaut
+
+    // Réinitialise l'erreur
+    setError('');
+
+    // Valide si les champs ne sont pas vides
+    if (!email || !password) {
+      setError('Veuillez remplir tous les champs.');
+      return;
+    }
+
+    // Si les champx w-[66%] h-4/5 shadow-2xl rounded-xls sont remplis, on simule une redirection
+    window.location.href = '/apropos';
+  };
+
+  const itemVariants = {
+  // L'état de départ pour tous les enfants
+  initial: { y: 40, opacity: 0 }, // Commence 20px plus bas et est invisible
+  // L'état d'arrivée pour tous les enfants
+  animate: { y: 0, opacity: 1 }, // Arrive à sa position finale et devient visible
+};
+
+// 2. DÉFINITION DE L'ANIMATION DU CONTENEUR (C'est ici qu'on ajoute la cascade)
+const containerVariants = {
+  // L'état initial du conteneur (invisible)
+  initial: { opacity: 0 },
+  // L'état animate déclenche la cascade (staggerChildren)
+  animate: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.5, // Le conteneur apparaît après 0.5s
+      staggerChildren: 0.08, // Chaque enfant commence son animation 80ms après le précédent
+    },
+  },
+};
+
   return (
-  <>
-  <div className="relative min-h-screen bg-black overflow-hidden font-sans">
+<div className="flex w-full h-screen items-center justify-center bg-[url('/ta.jpg')]">
+  <div className="flex w-full max-w-4xl h-4/5 shadow-2xl rounded-2xl overflow-hidden bg-white">
+    <motion.div className=" w-full hidden lg:flex w-1/2 rounded-2xl bg-no-repeat bg-cover bg-center justify-center items-center" style={{ backgroundImage: "url('/dadatoa.jpg')" }}
+                    
+                    // --- PARAMÈTRES D'ANIMATION ---
+                    initial={{ x: 40, opacity: 0 }} // Commence à 100px à droite et est invisible
+                    animate={{ x: 0, opacity: 1 }}    // Arrive à la position finale (0 décalage) et devient visible
+                    transition={{ type: "spring", stiffness: 100, delay: 0.2 }} >
+      <div className="text-white p-8 text-center">
+        <h1 className="text-5xl font-extrabold mb-4">Bienvenue !</h1>
+        <p className="text-xl opacity-90">
+          Connectez-vous pour accéder à votre espace personnalisé.
+        </p>
       
-
-      {/* Background Effect - Simulation avec un dégradé ou une image de fond si vous en avez une */}
-      <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-           style={{
-            backgroundImage: 'url(/musika.jpg)', // Un dégradé vert-noir pour simuler
-             // Ou utilisez une image de fond : backgroundImage: 'url(/path/to/your-background-image.jpg)',
-             // backgroundSize: 'cover',
-             // backgroundPosition: 'center',
-           }}
-      >
-        {/* Vous pourriez ajouter un div avec un fond vert foncé pour les lignes verticales si vous avez une image */}
-        {/* Exemple de simulation des lignes (très basique) */}
-        <div className="absolute inset-0 grid grid-cols-6 gap-x-2 opacity-10">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-green-500 w-full h-full animate-pulse-slow"></div>
-          ))}
-        </div>
+        {/* <img src="/illustration.svg" alt="Illustration" className="mt-10 max-w-xs mx-auto" /> */}
       </div>
+    </motion.div>
 
-      {/* Conteneur principal avec le border arrondi et le "glow" */}
-      <div className="relative z-10 mx-auto mt-8 mb-8 max-w-7xl border-2 border-green-500 rounded-3xl p-6 lg:p-10
-                      shadow-lg shadow-green-500/50 backdrop-blur-sm bg-black/60">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            {/* Icône du logo - simuler avec un cercle et un texte */}
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm">C</div>
-            <span className="text-white text-xl font-bold tracking-wider">PREDICTINVEST</span>
+    {/* composant à droite*/}
+    <div className="w-full lg:flex w-1/2 bg-white flex  justify-center items-center p-6 relative">
+      <motion.div className="w-full max-w-sm border-2 border-black rounded-3xl p-8 bg-white 
+          shadow-[0_0_20px_5px_rgba(0,0,0,0.6)] z-10" 
+               // --- PARAMÈTRES D'ANIMATION ---
+        variants={containerVariants} // Applique la règle de cascade
+        initial="initial"
+        animate="animate"> 
+     {/* autre ombre
+      <div className="w-full max-w-sm border-2 border-black rounded-3xl p-8 bg-white 
+    shadow-[-30px_0_20px_10px_rgba(0,0,0,0.7),0_0_15px_3px_rgba(0,0,0,0.5)] z-10">*/}
+         <motion.div className="text-center mb-8" variants={itemVariants}>
+          <h2 className="text-3xl font-bold text-white mb-2">Connexion</h2>
+          <p className="text-gray-400">Accédez à votre compte pour continuer</p>
+        </motion.div>
+        <motion.form className="space-y-6" onSubmit={handleSubmit} variants={itemVariants}>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+              Adresse e-mail
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-[#203445] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+              placeholder="Votre adresse email"
+            />
           </div>
-
-          {/* Navigation */}
-                  <nav className="hidden lg:flex space-x-8 text-gray-300">
-          {/* Remplacez <a> par <Link> */}
-        <Link href="/apropos" className="hover:text-green-400 transition-colors duration-200">
-          ACCUEIL
-        </Link>
-        <Link href="/" className="hover:text-green-400 transition-colors duration-200">
-            PREDICTION
-        </Link>
-        <Link href="/" className="hover:text-green-400 transition-colors duration-200">
-          TABLEAU DE BORD
-        </Link>
-        <Link href="/" className="hover:text-green-400 transition-colors duration-200">
-          A PROPOS
-        </Link>
-        </nav>
-
-          {/* Actions à droite */}
-          <div className="flex items-center space-x-4">
-            {/* Langue */}
-            <div className="flex items-center space-x-1 text-gray-300 hover:text-green-400 cursor-pointer">
-              {/* Icône Globe - utiliser une icône SVG réelle ici */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008.852 6H5a1 1 0 00-1 1v4a1 1 0 001 1h.774l.439 1.547A1 1 0 007 14h.001c.038 0 .074-.015.1-.04L9 12.04l1.898 1.91c.026.026.06.04.098.04H11a1 1 0 00.957-.79l.439-1.547h.774a1 1 0 001-1V7a1 1 0 00-1-1h-3.852a1 1 0 00-.703 1.168z" clipRule="evenodd" />
-              </svg>
-              <span>EN</span>
-              {/* Icône Flèche bas - utiliser une icône SVG réelle ici */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+              Mot de passe
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-[#203445] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+              placeholder="********"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
+                Se souvenir de moi
+              </label>
             </div>
-            {/* Bouton Connect Wallet */}
-            <button className="px-5 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200">
-              CONNECT WALLET
+            <a href="#" className="text-sm font-medium text-[#5686FE] hover:text-green-400">
+              Mot de passe oublié ?
+            </a>
+          </div>
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#5686FE] hover:bg-[#568600] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+            >
+              Se connecter
             </button>
           </div>
-        </header>
-
-        {/* Contenu principal Hero */}
-        <main className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center min-h-[calc(100vh-20rem)] pb-20">
-          {/* Texte principal et CTA */}
-          <div className="text-white">
-            <h2 className="text-4xl lg:text-6xl font-extrabold mb-4 leading-tight">
-              Financial Markets – Anticipate
-            </h2>
-            <div className="flex items-center space-x-2 mb-8">
-              {/* Simulateur de barre de progression Ethereum */}
-              <div className="w-48 h-8 bg-gray-700 rounded-full overflow-hidden relative">
-                <div className="absolute inset-y-0 left-0 bg-green-500 w-3/4"></div> {/* 75% rempli */}
-                <div className="absolute top-1/2 -translate-y-1/2 right-0 bg-green-700 rounded-full p-1 border-2 border-white flex items-center justify-center">
-                   {/* Icône Ethereum - utiliser un SVG réel ici */}
-                   <Image src="/ethereum-logo.png" alt="Ethereum" width={24} height={24} className="rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-3xl lg:text-5xl font-bold mb-10 text-gray-200">
-             Analyze & Predict with AI
-            </h2>
-            <p className="text-gray-400 max-w-md mb-8">
-              EXPLOITEZ L'IA POUR ANALYSER, PREVOIR ET COMPRENDRE LES TENDANCES DES MARCHES FINANCIERS;
-            </p>
-            <button className="px-8 py-3 border-2 border-green-500 text-green-500 rounded-full hover:bg-green-500 hover:text-white transition-all duration-200">
-              COMMENCER L'ANALYSE
-            </button>
-          </div>
-
-          {/* Visuels Droite */}
-          <div className="relative h-96 flex items-center justify-center">
-            {/* Icône Bitcoin Flottante */}
-            <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/50 animate-bounce-slow">
-              {/* Icône B de Bitcoin - utiliser un SVG réel ici */}
-              <span className="text-black text-3xl font-bold">₿</span>
-            </div>
-
-            {/* Forme 3D verte au centre (simulée) */}
-            <div className="absolute w-64 h-64 bg-green-600 rounded-full opacity-30 animate-spin-slow"></div>
-            <div className="absolute w-56 h-56 bg-green-400 rounded-full opacity-40 animate-spin-slow-reverse"></div>
-            {/* Pour simuler la forme abstraite, vous auriez besoin d'un SVG complexe ou d'une image */}
-            {/* <Image src="/abstract-3d-form.png" alt="Abstract Form" layout="fill" objectFit="contain" /> */}
-
-            {/* Icône Ethereum Flottante */}
-            <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/50 animate-bounce-slow-reverse">
-              {/* Icône Ethereum - utiliser un SVG réel ici */}
-              <Image src="/ethereum-logo.png" alt="Ethereum" width={32} height={32} className="rounded-full" />
-            </div>
-
-            {/* Texte "Lightning-fast..." */}
-            <div className="absolute top-1/2 right-0 transform -translate-y-1/2 text-right text-gray-400 text-sm">
-              <p>LIGHTNING-FAST</p>
-              <p>TRANSACTIONS. 0.0%</p>
-              <p>COMMISSION</p>
-            </div>
-          </div>
-        </main>
-      </div>
+        </motion.form>
+        <p className="mt-8 text-center text-sm text-gray-400">
+          Pas encore de compte ?{' '}
+          <a href="#" className="font-medium text-[#5686FE] hover:text-green-400">
+            S'inscrire
+          </a>
+        </p>
+      </motion.div>
     </div>
-  </>
+    </div>
+  </div>
 
   );
-}
+};
+
+export default LoginPage;

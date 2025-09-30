@@ -1,7 +1,11 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Sidebar from "./components/Sidebar";
+import { ThemeProvider } from "next-themes";
+import { motion } from 'framer-motion';
 
-import "./globals.css";
+import { itemVariants,  containerVariants} from "@/lib/Fonction";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,14 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   <html lang="en">
-      <body className="bg-[#0A141E] text-gray-300 min-h-screen">
-        <div className="flex justify-center">
-         
+    
+  <html lang="en" suppressHydrationWarning>
+    <body className="bg-[#0A141E] text-gray-300 min-h-screen">        
+      <div className="flex justify-center">
+        <div className="flex w-full bg-[#F3F4F6] dark:bg-gradient-to-br dark:from-gray-900 dark:to-black">
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
-          
-        </div>
-      </body>
-    </html>
+          </ThemeProvider>
+        </div> 
+      </div>
+    </body>
+  </html>
+      
   );
 }
