@@ -7,17 +7,174 @@ import ThemeToggle from './ThemeToggle';
 import LineChart from './LineChart';
 import { motion } from "framer-motion";
 import { itemVariants,  containerVariants} from "../lib/Fonction";
+import { DollarSign, Bitcoin, TrendingUp, Repeat2 } from 'lucide-react'; 
+import { useState, useEffect } from 'react';
+import CountUp from "react-countup";
+
 const MainContent = () => {
+  
+           const [wallet, setWallet] = useState<{ cash: { balance: number, currency: string }, crypto: { balance: number, currency: string } } | null>(null);
+           const [isLoading, setIsLoading] = useState(true);
+           const [error, setError] = useState<string | null>(null); // Ajout de la gestion d'erreur
+           
+           // 2. Récupération des données utilisateur au montage du composant
+           useEffect(() => {
+             // Fonction asynchrone pour utiliser try/catch
+             const fetchWalletData = async () => {
+               setIsLoading(true);
+               setError(null); // Réinitialiser l'erreur
+       
+               try {
+                 const res = await fetch("/api/wallet");
+                 const data = await res.json(); 
+       
+                 if (!res.ok) {
+                   // Utilisation du message d'erreur du backend pour un meilleur diagnostic
+                   const errorMessage = data.error || data.details || "Erreur serveur inconnue.";
+                   throw new Error(`Erreur API (${res.status}): ${errorMessage}`);
+                 }
+       
+                 // L'API renvoie { cash: { balance, currency }, crypto: { balance, currency } }
+                 if (data && data.cash && data.crypto) {
+                   // Les balances sont déjà des nombres si le backend les a bien formatées
+                   setWallet({
+                     cash: {
+                       balance: parseFloat(data.cash.balance), 
+                       currency: data.cash.currency
+                     },
+                     crypto: {
+                       balance: parseFloat(data.crypto.balance), 
+                       currency: data.crypto.currency
+                     },
+                   });
+                 } else {
+                   // Si les données ne sont pas au bon format ou sont vides
+                   setError("Format de données du portefeuille inattendu.");
+                   setWallet(null);
+                 }
+                 
+               } catch (err) {
+                 console.error("Erreur lors de la récupération du portefeuille:", err);
+                 setError(err instanceof Error ? err.message : "Erreur inconnue de la connexion.");
+                 setWallet(null);
+               } finally {
+                 setIsLoading(false); // Fin du chargement, que ce soit un succès ou un échec
+               }
+             };
+       
+             fetchWalletData();
+           }, []); // Le tableau vide [] assure que cela ne s'exécute qu'une seule fois au montage
+           
+           // 3. Logique d'affichage (gestion des états Chargement/Erreur/Affichage)
+           // Pour l'affichage principal 'f', nous utilisons le solde cash (EUR).
+           const f = isLoading 
+             ? "..." 
+             : error
+               ? "Erreur de chargement"
+               : wallet?.cash.balance !== undefined
+                   ? `${wallet.cash.balance.toFixed(2)} ${wallet.cash.currency}`
+                   : "Invité / Données indisponibles";
+           const c = isLoading
+  ? "..."
+  : error
+  ? "Erreur de chargement"
+  : wallet?.crypto.balance !== undefined
+  ? `${Number(wallet.crypto.balance).toFixed(4)} ${wallet.crypto.currency}`
+  : "Invité / Données indisponibles";
+
+
+       const performanceData = [
+  {
+    title: 'Solde Total',
+    icon: <DollarSign size={24} className="text-green-500" />,
+    value: f,
+    change: '+1.45% (24h)',
+    changeColor: 'text-[#5686FE]',
+  },
+  {
+    title: 'BTC Prix actuel',
+    icon: <Bitcoin size={24} className="text-yellow-500" />,
+      value: c,
+
+    change: '+1.123',
+    changeColor: 'text-[#5686FE]',
+  },
+  {
+    title: 'Performance Portefeuille',
+    icon: <TrendingUp size={24} className="text-green-500" />,
+    value: '+1.4578',
+    change: 'vs. Performance d\'hier',
+    changeColor: 'text-[#5686FE]',
+  },
+  {
+    title: 'Volume Transactions 24H',
+    icon: <Repeat2 size={24} className="text-blue-500" />,
+    value: '4,120 ',
+    change: 'Haute Liquidité',
+    changeColor: 'text-gray-400',
+  },
+];
+
   return (
 <main className="flex-1  md:p-12">
   {/* Header avec la barre de recherche */}
- <motion.div className="flex flex-col lg:flex-row gap-4 " variants={containerVariants}
+ 
+
+      {/* Balance par devise */}
+<motion.section 
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" 
+    variants={containerVariants}
+    initial="initial"
+    animate="animate"
+>
+    {performanceData.map((item, index) => (
+        <motion.div 
+            key={index} 
+            variants={containerVariants}
+            className=" bg-white  p-4 rounded-xl flex flex-col justify-between  border border-[#5686FE]/20
+         
+           transition-shadow duration-100   dark:bg-[#142636]  shadow-[0_0_10px_5px_rgba(0,0,0,0.6)]  hover:shadow-[#5686FE]/20
+           ">
+            {/* L'ordre est inversé : Titre à gauche, Icône à droite */}
+            <motion.div className="flex justify-between items-center mb-4" variants={containerVariants}>
+                <span className="font-bold text-lg text-gray-500 dark:text-gray-400">{item.title}</span> 
+                <span className="text-2xl">
+                    {item.icon}
+                </span>
+            </motion.div>
+            
+            {/* Valeur Principale */}
+                <p className="text-3xl font-extrabold text-gray-700 dark:text-white "> 
+                <CountUp
+                  start={0}
+                  end={
+                    parseFloat(
+                      String(item.value)
+                        .replace(",", ".") // remplace la virgule par un point
+                        .match(/[\d.]+/)?.[0] || "0" // extrait juste les chiffres
+                    )
+                  }
+                  duration={1.5}
+                  decimals={4}
+                  separator=","
+                  suffix={
+                    " " +
+                    (String(item.value).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
+                  }
+                />
+                </p>    
+            {/* Changement / Statut */}
+            <span className={`text-sm ${item.changeColor}`}>{item.change}</span>
+        </motion.div>
+    ))}
+</motion.section>
+      <motion.div className="flex flex-col lg:flex-row gap-4 " variants={containerVariants}
       initial="initial"
       animate="animate">
 
   {/* Première section : Bienvenue et les boutons */}
   <motion.section className="w-full lg:w-2/5 h-full" variants={containerVariants}>
-    <div className="w-full h-40 bg-white rounded-lg flex items-center justify-center text-sm text-gray-400 dark:bg-[radial-gradient(at_top_right,_#5686FE_1%,_#5686FE_20%,_#142636_60%,_#142636_30%)] dark:to-blue-700 dark:text-white">
+    <div className="w-full h-40 bg-white rounded-lg flex items-center justify-center border border-[#5686FE]/20 text-sm text-gray-400 dark:bg-[#142636] dark:to-blue-700 dark:text-white dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
       <div >
         <h2 className="text-xl font-bold">Market Prediction Dashboard</h2>
         <p className="text-sm text-gray-500">Global Market Sentiment</p>
@@ -37,41 +194,18 @@ const MainContent = () => {
       
       <div className="w-full">
         {/* Simulation du graphique */}
-        <div className="w-full h-40 bg-white rounded-lg flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636]">
+        <div className="w-full h-40 bg-white rounded-lg border border-[#5686FE]/20 flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
           Graphique de  sèrie
           <LineChart />
         </div>
       </div>
     </div>
   </section>
-</motion.div> <br />
-
-      {/* Balance par devise */}
-      <motion.section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" variants={containerVariants}
-      initial="initial"
-      animate="animate">
-        {['USD', 'EUR', 'GBP', 'JPY'].map((currency) => (
-          <motion.div 
-            key={currency} 
-            variants={containerVariants}
-            className="bg-white p-6 rounded-xl flex flex-col justify-between hover:bg-[#5686FE] transition-colors cursor-pointer dark:bg-[radial-gradient(at_top_right,_#5686FE_4%,_#142636_60%,_#142636_30%)] dark:hover:bg-[#203445]"
-          
-          >
-            <motion.div className="flex justify-between items-center mb-4" variants={containerVariants}>
-              <span className="text-2xl">
-                {currency === 'USD' ? '💲' : currency === 'EUR' ? '💶' : currency === 'GBP' ? '💷' : '💴'}
-              </span>
-              <span className="font-bold text-lg">{currency}</span>
-              <span className="text-green-500">↗️</span>
-            </motion.div>
-            <p className="text-2xl font-bold text-white my-2">£8,923</p>
-            <span className="text-green-500 text-sm">+40,225</span>
-          </motion.div>
-        ))}
-      </motion.section>
+</motion.div>
+ <br />
 
       {/* Tableau des tokens */}
-      <div className="bg-[#142636] rounded-xl p-6 shadow-md">
+      <div className="bg-[#142636] rounded-xl p-6 shadow-md border border-[#5686FE]/20">
         <h3 className="text-xl font-bold text-gray-100 mb-4 border-b border-gray-700 pb-2">Activité récente</h3>
         <div className="space-y-4">
           <div className="p-3 bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">

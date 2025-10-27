@@ -1,13 +1,18 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import ThemeToggle from './ThemeToggle';
+import { itemVariants,  containerVariants} from "../lib/Fonction";
+import { motion } from "framer-motion";
+import CountUp from "react-countup";
+import { FaEnvelope, FaHome, FaPhone, FaInfoCircle, FaFileAlt } from 'react-icons/fa';
+
 
 const Profil = () => {
  
 
   const user = {
-    name: "Robert",
-    email: "robert@email.com",
+    name: "Ragnar Lodbrok",
+    email: "ragnar@gmail.com",
     bio: "Développeur passionné par la finance décentralisée et la technologie.",
     avatar: "https://placehold.co/150x150/0A141E/EAEFF5?text=R",
     stats: {
@@ -24,53 +29,194 @@ const Profil = () => {
     { id: 4, type: "Achat", token: "SOL", amount: "5 SOL", date: "2023-10-22" },
   ];
 
+  const [wallet, setWallet] = useState<{ cash: { balance: number, currency: string }, crypto: { balance: number, currency: string } } | null>(null);
+      const [isLoading, setIsLoading] = useState(true);
+      const [error, setError] = useState<string | null>(null); // Ajout de la gestion d'erreur
+      
+      // 2. Récupération des données utilisateur au montage du composant
+      useEffect(() => {
+        // Fonction asynchrone pour utiliser try/catch
+        const fetchWalletData = async () => {
+          setIsLoading(true);
+          setError(null); // Réinitialiser l'erreur
+  
+          try {
+            const res = await fetch("/api/wallet");
+            const data = await res.json(); 
+  
+            if (!res.ok) {
+              // Utilisation du message d'erreur du backend pour un meilleur diagnostic
+              const errorMessage = data.error || data.details || "Erreur serveur inconnue.";
+              throw new Error(`Erreur API (${res.status}): ${errorMessage}`);
+            }
+  
+            // L'API renvoie { cash: { balance, currency }, crypto: { balance, currency } }
+            if (data && data.cash && data.crypto) {
+              // Les balances sont déjà des nombres si le backend les a bien formatées
+              setWallet({
+                cash: {
+                  balance: parseFloat(data.cash.balance), 
+                  currency: data.cash.currency
+                },
+                crypto: {
+                  balance: parseFloat(data.crypto.balance), 
+                  currency: data.crypto.currency
+                },
+              });
+            } else {
+              // Si les données ne sont pas au bon format ou sont vides
+              setError("Format de données du portefeuille inattendu.");
+              setWallet(null);
+            }
+            
+          } catch (err) {
+            console.error("Erreur lors de la récupération du portefeuille:", err);
+            setError(err instanceof Error ? err.message : "Erreur inconnue de la connexion.");
+            setWallet(null);
+          } finally {
+            setIsLoading(false); // Fin du chargement, que ce soit un succès ou un échec
+          }
+        };
+  
+        fetchWalletData();
+      }, []); // Le tableau vide [] assure que cela ne s'exécute qu'une seule fois au montage
+      
+      // 3. Logique d'affichage (gestion des états Chargement/Erreur/Affichage)
+      // Pour l'affichage principal 'f', nous utilisons le solde cash (EUR).
+      const f = isLoading 
+        ? "Chargement..." 
+        : error
+          ? "Erreur de chargement"
+          : wallet?.cash.balance !== undefined
+              ? `${wallet.cash.balance.toFixed(2)} ${wallet.cash.currency}`
+              : "Invité / Données indisponibles";
+
   return (
     <main className="flex-1  md:p-12">
-    <div className="flex font-sans min-h-screen bg-[#0A141E] dark:bg-[#0A141E] text-gray-300 dark:text-gray-300 transition-colors duration-300">
+    <motion.div className="flex font-sans min-h-screen  text-gray-300 dark:text-gray-300 transition-colors duration-300"
+    >
       
       {/* Sidebar - Same as Dashboard */}
      
 
       {/* Main content */}
-      <div className="flex-1 ">
+      <motion.div className="flex-1 " >
 
         {/* User Profile Section */}
-        <section className="bg-[#142636] rounded-xl p-6 mb-8 shadow-md transition-colors duration-300">
-          <div className="flex items-center flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
+        <motion.section className="bg-white dark:bg-[#142636] rounded-xl border border-[#5686FE]/20 p-6 mb-8 shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}
+      initial="initial"
+      animate="animate">
+          <motion.div className="flex items-center flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8" variants={containerVariants}>
             <img 
-              src={user.avatar}
+              src="/ragnarlot.jpg"
               alt={`Profil de ${user.name}`}
-              className="w-24 h-24 rounded-full border-4 border-green-500"
+              className="w-24 h-24 rounded-full border-4 border-[#5686FE]"
             />
             <div>
-              <h2 className="text-3xl font-bold text-gray-100">{user.name}</h2>
-              <p className="text-md text-gray-400">{user.email}</p>
-              <p className="text-sm mt-2 text-gray-300 max-w-lg">{user.bio}</p>
+              
+              <h2 className="text-3xl font-bold text-gray-700 dark:text-gray-100">
+                {user.name}
+              </h2>
+              
+              <div className="flex items-center gap-3 mt-2">
+                <FaEnvelope className="text-blue-500 text-xl" />
+                <p className="text-md text-gray-700 dark:text-gray-100">{user.email}</p>
+               </div>
+               <div className="flex items-center gap-3 mt-2">
+                <FaPhone className="text-blue-500 text-xl" />
+                <p className="text-md text-gray-700 dark:text-gray-100">032 12 373 29</p>
+               </div>
+              <div className="flex items-center gap-3 mt-2"> 
+                <FaHome className="text-blue-500 text-xl" />
+                <p className="text-md text-gray-700 dark:text-gray-100">Antananarivo, Madagascar</p>
+              </div>
+              <div className="flex items-center gap-3 mt-2">
+                <FaInfoCircle  className="text-blue-500 text-xl" />
+                <p className="text-sm  text-gray-700 dark:text-gray-100">{user.bio}</p>
+              </div>
             </div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Stats Section */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#142636] p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300">
-            <span className="text-sm text-gray-400">Total des fonds</span>
-            <p className="text-3xl font-bold text-white my-2">{user.stats.totalFunds}</p>
-          </div>
-          <div className="bg-[#142636] p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300">
-            <span className="text-sm text-gray-400">Volume de trading</span>
-            <p className="text-3xl font-bold text-white my-2">{user.stats.tradingVolume}</p>
-          </div>
-          <div className="bg-[#142636] p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300">
-            <span className="text-sm text-gray-400">Transactions</span>
-            <p className="text-3xl font-bold text-white my-2">{user.stats.transactionCount}</p>
-          </div>
-        </section>
+        <motion.section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8" variants={containerVariants}
+      initial="initial"
+      animate="animate">
+          <motion.div className="bg-[#142636] p-6  border border-[#5686FE]/20 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+            <span className=" font-bold text-lg text-[#5686FE]">Total des fonds</span>
+            <p className="text-3xl font-bold text-white my-2"><CountUp
+                start={0}
+                end={
+                  parseFloat(
+                    String(f)
+                      .replace(",", ".") // remplace la virgule par un point
+                      .match(/[\d.]+/)?.[0] || "0" // extrait juste les chiffres
+                  )
+                }
+                duration={2.5}
+                decimals={4}
+                separator=","
+                suffix={
+                  " " +
+                  (String(f).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
+                }
+              />
+</p>
+          </motion.div>
+          <motion.div className="bg-[#142636] border border-[#5686FE]/20 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+            <span className=" font-bold text-lg text-[#5686FE]">Volume de trading</span>
+            <p className="text-3xl font-bold text-white my-2">
+              <CountUp
+                start={0}
+                end={
+                  parseFloat(
+                    String(user.stats.tradingVolume)
+                      .replace(",", ".") // remplace la virgule par un point
+                      .match(/[\d.]+/)?.[0] || "0" // extrait juste les chiffres
+                  )
+                }
+                duration={2.5}
+                decimals={4}
+                separator=","
+                suffix={
+                  " " +
+                  (String(user.stats.tradingVolume).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
+                }
+              />
+            </p>
+          </motion.div>
+          <motion.div className="bg-[#142636] border border-gray-700 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+            <span className=" font-bold text-lg text-[#5686FE]">Transactions</span>
+            <p className="text-3xl font-bold text-white my-2">
+              <CountUp
+                start={0}
+                end={
+                  parseFloat(
+                    String(user.stats.transactionCount)
+                      .replace(",", ".") // remplace la virgule par un point
+                      .match(/[\d.]+/)?.[0] || "0" // extrait juste les chiffres
+                  )
+                }
+                duration={2.5}
+                decimals={4}
+                separator=","
+                suffix={
+                  " " +
+                  (String(user.stats.transactionCount).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
+                }
+              />
+            </p>
+          </motion.div>
+        </motion.section>
 
         {/* Recent Transactions Table */}
-        <section className="bg-[#142636] rounded-xl p-6 shadow-md transition-colors duration-300">
-          <h3 className="text-xl font-bold text-gray-100 mb-4">Transactions récentes</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
+        <motion.section className="bg-[#142636] rounded-xl p-6 shadow-md transition-colors duration-300 border border-gray-700"
+        variants={containerVariants}
+      initial="initial"
+      animate="animate">
+          <motion.h3 className="text-xl font-bold text-gray-100 mb-4" variants={containerVariants}>Transactions récentes</motion.h3>
+          <motion.div className="overflow-x-auto" variants={containerVariants}>
+            <motion.table className="min-w-full" variants={containerVariants}>
               <thead>
                 <tr className="border-b border-gray-700">
                   <th className="py-2 text-left text-gray-400 font-medium">Date</th>
@@ -84,16 +230,16 @@ const Profil = () => {
                   <tr key={tx.id} className="border-b border-gray-700 hover:bg-[#203445] transition-colors">
                     <td className="py-4 whitespace-nowrap text-gray-300">{tx.date}</td>
                     <td className="py-4 whitespace-nowrap text-gray-300">{tx.type}</td>
-                    <td className="py-4 whitespace-nowrap text-green-500">{tx.token}</td>
+                    <td className="py-4 whitespace-nowrap text-[#5686FE]">{tx.token}</td>
                     <td className="py-4 whitespace-nowrap text-white">{tx.amount}</td>
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-    </div>
+            </motion.table>
+          </motion.div>
+        </motion.section>
+      </motion.div>
+    </motion.div>
   </main>
   );
 };

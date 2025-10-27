@@ -30,24 +30,24 @@ const PredictionPage = () => {
 
   return (
     <main className="flex-1  md:p-12">
-    <div className="flex-1 lg:p-8 text-gray-300">
+    <div className="flex-1 text-gray-300">
       <h2 className="text-3xl font-bold text-white mb-6">Prédictions</h2>
       
       {/* Indicateurs de prédiction */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
-        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:bg-[radial-gradient(at_top_right,_#5686FE_4%,_#142636_60%,_#142636_30%)]">
+        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
           <p className="text-sm font-semibold text-gray-400">Revenu prévu (Prochain mois)</p>
           <p className="text-3xl font-bold text-green-400 mt-2">$3,800</p>
         </div>
-        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:bg-[radial-gradient(at_top_right,_#5686FE_4%,_#142636_60%,_#142636_30%)]">
+        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
           <p className="text-sm font-semibold text-gray-400">Nouveaux utilisateurs (Prochain mois)</p>
           <p className="text-3xl font-bold text-green-400 mt-2">1,500</p>
         </div>
-        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:bg-[radial-gradient(at_top_right,_#5686FE_4%,_#142636_60%,_#142636_30%)]">
+        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:bshadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
           <p className="text-sm font-semibold text-gray-400">Taux de conversion</p>
           <p className="text-3xl font-bold text-green-400 mt-2">3.4%</p>
         </div>
-        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:bg-[radial-gradient(at_top_right,_#5686FE_4%,_#142636_60%,_#142636_30%)]">
+        <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
           <p className="text-sm font-semibold text-gray-400">Meilleure performance (Produit)</p>
           <p className="text-xl font-bold text-green-400 mt-2">Chaussures de sport</p>
         </div>

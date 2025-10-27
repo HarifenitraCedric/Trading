@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  passwordHash String?
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+  wallets      Wallet[]
+}
+
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  currency  String
+  balance   Decimal  @db.Decimal(20, 10)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, currency])
+}
+
+model Transaction {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  type           String
+  assetTicker    String
+  assetQuantity  Decimal  @db.Decimal(20, 10)
+  totalAmountEUR Decimal? @db.Decimal(20, 10)
+  executedAt     DateTime @default(now())
+  solde_actuel  Decimal  @db.Decimal(20, 10)
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, executedAt])
+}
