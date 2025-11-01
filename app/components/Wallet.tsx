@@ -262,19 +262,19 @@ const WalletPage = () => {
                         </h2>
  
 
-                        <table className="w-full border-separate bg-[#1a2333]  border-spacing-0">
+                        <table className="w-full border-separate bg-white  dark:bg-[#1a2333] border-spacing-0">
                             <thead className="w-full ">
                                 {/* En-tête Desktop */}
-                                <tr className="hidden md:table-row bg-gray-700/40 text-xs font-semibold uppercase text-gray-300  rounded-lg">
-                                    <th className="w-1/4 px-6 py-6 text-center  ">Transaction</th>
-                                    <th className="w-1/4 px-6 py-6 text-center ">Quantite</th>
-                                    <th className="w-1/4 px-6 py-6 text-center  ">Date</th>
-                                    <th className="w-1/4 px-6 py-6 text-right ">Montant</th>
-                                    <th className="w-1/4 px-6 py-6 text-right ">Solde Actuel</th>
+                                <tr className="hidden md:table-row bg-gray-300/40 text-xs font-semibold uppercase text-gray-300  rounded-lg">
+                                    <th className="w-1/4 px-6 py-6 text-center text-gray-700 dark:text-white">Transaction</th>
+                                    <th className="w-1/4 px-6 py-6 text-center text-gray-700 dark:text-white">Quantite</th>
+                                    <th className="w-1/4 px-6 py-6 text-center  text-gray-700 dark:text-white">Date</th>
+                                    <th className="w-1/4 px-6 py-6 text-right text-gray-700 dark:text-white">Montant</th>
+                                    <th className="w-1/4 px-6 py-6 text-right text-gray-700 dark:text-white">Solde Actuel</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody >
                                 {transact.map((tx, index) => {
                                     // Logique conditionnelle pour les styles et le montant
                                     const isAchat = tx.type === 'Achat';
@@ -289,7 +289,7 @@ const WalletPage = () => {
                                     return (
                                         <tr
                                             key={tx.id || index}
-                                            className={`flex flex-col md:table-row mb-4 md:mb-0 border border-gray-700/50 md:border-none rounded-xl bg-[#1a2333] text-white`}
+                                            className={`flex flex-col md:table-row mb-4 md:mb-0 border border-gray-700/50 md:border-none rounded-xl className="bg-white  dark:bg-[#1a2333]" text-white`}
                                         >
                                             
                                             {/* COLONNE 1: Transaction (Icone + Type) - DOIT être un <td> */}
@@ -305,7 +305,7 @@ const WalletPage = () => {
                                                     </div>
                                                 )}
                                                 {/* Type de transaction */}
-                                                <div className="font-semibold ml-4 whitespace-nowrap">
+                                                <div className="text-gray-700 dark:text-white font-semibold ml-4 whitespace-nowrap">
                                                     {tx.type} de {tx.assetTicker}
                                                 </div>
 

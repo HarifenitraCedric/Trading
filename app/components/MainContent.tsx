@@ -7,11 +7,83 @@ import ThemeToggle from './ThemeToggle';
 import LineChart from './LineChart';
 import { motion } from "framer-motion";
 import { itemVariants,  containerVariants} from "../lib/Fonction";
-import { DollarSign, Bitcoin, TrendingUp, Repeat2 } from 'lucide-react'; 
+import { DollarSign, ArrowUp, Bitcoin, TrendingUp, Repeat2 } from 'lucide-react'; 
 import { useState, useEffect } from 'react';
 import CountUp from "react-countup";
 
+
+interface TransactionData {
+  id: number;
+  type: string;
+  assetTicker: string;
+  assetQuantity: number;
+  totalAmountEUR: number;
+  solde_actuel: number;
+  executedAt: Date; 
+
+}
 const MainContent = () => {
+    const [transact, setTransact] = useState<TransactionData[]>([]); 
+      const [isLoadings, setIsLoadings] = useState(true);
+  
+      useEffect(() => {
+          async function fetchTransactions() {
+              try {
+    const res = await fetch("/api/transaction", { method: "GET" }); 
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({ message: "Erreur inconnue sans corps JSON." }));
+      console.error(`Erreur ${res.status} lors de la récupération :`, errorData.message);
+      return; 
+    }
+    
+    const rawData = await res.json();
+  
+  
+  
+    // Vérifier le premier élément
+    if (rawData.length > 0) {
+      console.log("Premier élément - executedAt:", rawData[0].executedAt, "type:", typeof rawData[0].executedAt);
+    }
+  
+    const data: TransactionData[] = rawData.map((item: any) => {
+      let executedAtDate = null;
+      if (item.executedAt) {
+        // Conversion directe
+        executedAtDate = new Date(item.executedAt);
+        if (isNaN(executedAtDate.getTime())) {
+          // Essaie de remplacer l'espace par 'T'
+          const isoString = item.executedAt.replace(' ', 'T');
+          executedAtDate = new Date(isoString);
+          if (isNaN(executedAtDate.getTime())) {
+            console.warn(`Date invalide: ${item.executedAt}`);
+            executedAtDate = null;
+          }
+        }
+      }
+      return {
+        ...item,
+        executedAt: executedAtDate
+      };
+    });
+  
+    // Afficher les données converties
+    console.log("Données converties:", data);
+  
+    setTransact(data);
+    
+  } catch (error) {
+    console.error("Erreur lors de la récupération:", error);
+  }
+  
+               finally {
+                  setIsLoadings(false);
+              }
+          }
+  
+          fetchTransactions();
+      }, []);
+  
   
            const [wallet, setWallet] = useState<{ cash: { balance: number, currency: string }, crypto: { balance: number, currency: string } } | null>(null);
            const [isLoading, setIsLoading] = useState(true);
@@ -137,7 +209,7 @@ const MainContent = () => {
            ">
             {/* L'ordre est inversé : Titre à gauche, Icône à droite */}
             <motion.div className="flex justify-between items-center mb-4" variants={containerVariants}>
-                <span className="font-bold text-lg text-gray-500 dark:text-gray-400">{item.title}</span> 
+                <span className="font-bold text-lg text-[#5686FE]/80 dark:text-[#5686FE]/70">{item.title}</span> 
                 <span className="text-2xl">
                     {item.icon}
                 </span>
@@ -205,7 +277,8 @@ const MainContent = () => {
  <br />
 
       {/* Tableau des tokens */}
-      <div className="bg-[#142636] rounded-xl p-6 shadow-md border border-[#5686FE]/20">
+    <div className="grid grid-cols-3 gap-4">
+      <div className="bg-[#142636] col-span-2 bg-gray-800 rounded-xl p-6 shadow-md border border-[#5686FE]/20">
         <h3 className="text-xl font-bold text-gray-100 mb-4 border-b border-gray-700 pb-2">Activité récente</h3>
         <div className="space-y-4">
           <div className="p-3 bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
@@ -240,7 +313,79 @@ const MainContent = () => {
           </div>
         </div>
       </div>
-    </main>
+      {/* ACTIVITES RECENTS */}
+      <div className="bg-[#142636]  col-span-1 border border-[#5686FE]/20 p-4 rounded-xl">
+        <h3 className="text-[#5686FE] font-bold text-lg">Recent Transaction</h3>
+
+          <table>
+            <tbody >
+              {transact.map((tx, index) => {
+                  // Logique conditionnelle pour les styles et le montant
+                  const isAchat = tx.type === 'Achat';
+                  const amountColorClass = isAchat ? 'text-green-500' : 'text-green-500';
+                  const badgeColorClass = isAchat ? 'bg-green-500/10 text-green-700' : 'bg-green-500/10 text-green-700';
+                  
+                  // Correction de type et ajout du signe
+                  // FIX: Remplacement de <div> par <tr>
+                  // On utilise flex et flex-col pour que le <tr> agisse comme une carte sur mobile
+                  return (
+                      <tr
+                          key={tx.id || index}
+                          className={`w-full flex flex-col md:table-row md:mb-0 border border-gray-700/50 md:border-none rounded-xl bg-white dark:bg-[#1a2333] text-white`}
+                      >
+                          
+                          {/* COLONNE 1: Transaction (Icone + Type) - DOIT être un <td> */}
+                          <td className=" flex items-center justify-between md:justify-start p-4">
+                              {/* Icône */}
+                              {isAchat ? (
+                                  <div className="p-3 rounded-full flex-shrink-0 bg-orange-500/10">
+                                      <TrendingUp className="w-5 h-5 text-orange-500" />
+                                  </div>
+                              ) : (
+                                  <div className="p-3 rounded-full flex-shrink-0 bg-red-500/10">
+                                      <ArrowUp className="w-5 h-5 text-red-500" />
+                                  </div>
+                              )}
+                              {/* Type de transaction */}
+                              <div className="text-gray-700 dark:text-white text-base ml-4 whitespace-nowrap">
+                                  {tx.type} de {tx.assetTicker}<br/>
+
+                                   {tx.assetQuantity}
+                              </div>
+
+                              {/* Montant Mobile (affiché ici dans le <td> de la transaction pour la vue 'carte') */}
+                            
+                          </td>
+
+                          {/* COLONNE 4: Montant et Statut - DOIT être un <td> (Masqué sur mobile, affiché sur desktop) */}
+                           
+                            
+                            <td className=" flex items-center justify-between md:justify-end md:w-auto p-4">
+                              <span className="font-semibold  text-base rounded-full bg-[#5686FE]/10 p-2 flex-shrink-0">
+                                  {Number(tx.totalAmountEUR).toFixed(2)} £ 
+                              </span>
+                                 
+                              <span className=" text-gray-400  dark:text-white text-xs ml-4 whitespace-nowrap ">
+                                {tx.executedAt ? tx.executedAt.toLocaleString("fr-FR", {
+                              year: 'numeric',
+                              month: 'numeric',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit' // Optionnel : pour afficher les secondes
+                          }) : "N/A"}
+                              </span>
+                          </td>  
+                      </tr>
+                  );
+              })}
+            </tbody>
+          </table>
+        </div>
+    
+    </div>
+  </main>
+    
   );
 };
 

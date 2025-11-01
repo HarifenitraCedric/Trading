@@ -25,7 +25,7 @@ export default function Sidebar({ active, onSelect }: SidebarProps)  {
     { name: "Profile", icon: <FaUser />, href: "/Profil" },
     { name: "Settings", icon: <FaCog />, href: "/Settings" },
     { name: "Aide", icon: <FaQuestionCircle  />, href: "/Aide" },
-    { name: "Notifications", icon: <MdNotifications />, href: "/notifications" },
+  
     { name: "Test", icon: <FaComment />, href: "/" },
     { name: "ChatBoot", icon: <FaComment />, href: "/" },
     { name: "Logout", icon: <FaSignOutAlt />, href: "/" },

@@ -159,7 +159,7 @@ const MarketDashboard = () => {
         </div>
 
         <p className="text-center text-xs text-gray-600 mt-12 p-4 bg-[#1a2333] rounded-lg border border-gray-700">
-          *Taux simulés rafraîchis toutes les 3 secondes. Les données réelles doivent provenir d'une API de marché fiable.
+          *Taux simulés rafraîchis toutes les 3 secondes. 
         </p>
       </div>
     </main>
