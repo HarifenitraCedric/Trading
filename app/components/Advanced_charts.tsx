@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect ,useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-
+import { createChart } from "lightweight-charts";
 // Données fictives pour le graphique
 // La partie prédite est indiquée par 'isPrediction: true'
-const data = [
+/*const data = [
   { name: 'Jan', revenue: 4000, users: 2400 },
   { name: 'Fév', revenue: 3000, users: 1398 },
   { name: 'Mar', revenue: 2000, users: 9800 },
@@ -14,12 +14,39 @@ const data = [
   { name: 'Août (P)', revenue: 3800, users: 4500, isPrediction: true },
   { name: 'Sep (P)', revenue: 4200, users: 4800, isPrediction: true },
   { name: 'Oct (P)', revenue: 4500, users: 5100, isPrediction: true },
-];
+];*/
 
 const PredictionPage = () => {
   const [whatIfValue, setWhatIfValue] = useState(10);
   const [predictedRevenue, setPredictedRevenue] = useState(4500);
+  const [data, setData] = useState([]);
+  const symbol = "AAPL"; // tu peux changer ou le passer en prop
 
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol}`);
+      const json = await res.json();
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // premier chargement
+    const interval = setInterval(fetchData, 30000); // recharge toutes les 30 secondes
+    return () => clearInterval(interval);
+  }, []);
+
+  const today = new Date().toLocaleDateString(); // ex: 31/10/2025
+  
   // Fonction de base pour simuler l'analyse "What-if"
   const handlePredict = () => {
     // Logique de prédiction simulée :
@@ -54,42 +81,57 @@ const PredictionPage = () => {
       </div>
 
       {/* Graphique de prédiction */}
-      <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md mb-8">
-        <h3 className="text-xl font-bold text-gray-100 mb-4">Prévision des revenus et des utilisateurs</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart
-            data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9CA3AF" />
-            <YAxis stroke="#9CA3AF" />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-              itemStyle={{ color: '#E5E7EB' }}
-              labelStyle={{ color: '#9CA3AF' }}
-            />
-            <Legend wrapperStyle={{ color: '#E5E7EB' }} />
-            <Line
-              type="monotone"
-              dataKey="revenue"
-              stroke="#10B981"
-              strokeWidth={2}
-              dot={{ stroke: '#10B981', strokeWidth: 2 }}
-              activeDot={{ r: 8 }}
-              name="Revenu"
-            />
-            <Line
-              type="monotone"
-              dataKey="users"
-              stroke="#FBBF24"
-              strokeWidth={2}
-              dot={{ stroke: '#FBBF24', strokeWidth: 2 }}
-              activeDot={{ r: 8 }}
-              name="Utilisateurs"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={data}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="url(#colorPrice)"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
       </div>
 
       {/* Aperçus clés et analyse de scénario */}

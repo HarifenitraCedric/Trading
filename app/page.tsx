@@ -27,7 +27,7 @@ const LoginPage = () => {
 
       // Attendre la fin de l’animation avant de rediriger
       setTimeout(() => {
-        window.location.href = '/apropos';
+        window.location.href = '/accueil'; // Redirige vers la page d'accueil
       }, 800);
   };
 
