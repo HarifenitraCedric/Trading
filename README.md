@@ -20,7 +20,7 @@ GOOGLE_AI_STUDIO_KEY="<key_here>"
 ```
 
 - Pour générer un clé, aller sur [https://aistudio.google.com/api-keys](https://aistudio.google.com/api-keys)
-- (Optionel) Vous pouvez utiliser **Docker** si vous le voulez. Lancer juste dans ce dossier `docker compose up -d` pour lancer la base. Tout les informations de ce base seront sur `compose.yaml`
+- (Optionel) Vous pouvez utiliser **Docker** si vous le voulez. Lancer juste dans ce dossier `docker compose up -d` pour lancer la base. Toutes les informations de ce base seront sur `compose.yaml`
 
 ## Installation
 
