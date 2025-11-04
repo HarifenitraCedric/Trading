@@ -97,13 +97,15 @@ const containerVariants = {
      {/* autre ombre
       <div className="w-full max-w-sm border-2 border-black rounded-3xl p-8 bg-white 
     shadow-[-30px_0_20px_10px_rgba(0,0,0,0.7),0_0_15px_3px_rgba(0,0,0,0.5)] z-10">*/}
-         <motion.div className="text-center mb-8" variants={itemVariants}>
-          <h2 className="text-3xl font-bold text-white mb-2">Connexion</h2>
-          <p className="text-gray-400">Accédez à votre compte pour continuer</p>
+         <motion.div className="text-center mb-4" variants={itemVariants}>
+          
+                  <span className="text-[#5686FE] text-2xl font-bold mb-4">PREDICTINVEST</span>
+                  <br />
+                 
         </motion.div>
         <motion.form className="space-y-6" onSubmit={handleSubmit} variants={itemVariants}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               Adresse e-mail :
             </label>
             <input
@@ -119,7 +121,7 @@ const containerVariants = {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Mot de passe :
             </label>
             <input

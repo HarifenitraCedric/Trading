@@ -134,10 +134,7 @@ const Profil = () => {
                 <FaInfoCircle  className="text-blue-500 text-xl" />
                 <p className="text-sm  text-gray-700 dark:text-gray-100">{user.bio}</p>
               </div>
-              <div className="flex items-center gap-3 mt-2">
-                <FaInfoCircle  className="text-blue-500 text-xl" />
-                <p className="text-sm  text-gray-700 dark:text-gray-100">{user.bio}</p>
-              </div>
+             
             </div>
           </motion.div>
         </motion.section>

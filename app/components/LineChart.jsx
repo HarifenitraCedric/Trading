@@ -52,7 +52,7 @@ const LineChart = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto"> {/* Utilisation de Tailwind */}
+    <div className="w-full h-full max-w-lg mx-auto"> {/* Utilisation de Tailwind */}
       <Line options={options} data={data} />
     </div>
   );
