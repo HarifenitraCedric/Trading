@@ -40,3 +40,10 @@ model Transaction {
 
   @@index([userId, executedAt])
 }
+
+model TradingData {
+  id      Int      @id @default(autoincrement())
+  symbol  String   @db.VarChar(10)
+  price   Decimal  @db.Decimal(10, 2)
+  time    DateTime @default(now())
+}

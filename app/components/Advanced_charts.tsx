@@ -1,6 +1,7 @@
 import React, { useEffect ,useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { createChart } from "lightweight-charts";
+import { a } from 'framer-motion/client';
 // Données fictives pour le graphique
 // La partie prédite est indiquée par 'isPrediction: true'
 /*const data = [
@@ -19,13 +20,24 @@ import { createChart } from "lightweight-charts";
 const PredictionPage = () => {
   const [whatIfValue, setWhatIfValue] = useState(10);
   const [predictedRevenue, setPredictedRevenue] = useState(4500);
-  const [data, setData] = useState([]);
-  const symbol = "AAPL"; // tu peux changer ou le passer en prop
+  const [btcData, setBtcData] = useState([]);
+  const [ethData, setEthData] = useState([]);
+  const [eurData, setEurData] = useState([]);
+  const [gbpData, setGbpData] = useState([]);
+  const [aaplData, setAaplData] = useState([]);
+  const [msftData, setMsftData] = useState([]);
+  const symbol_1 = "BTC-USD"; // tu peux changer ou le passer en prop
+  const symbol_2 = "ETH-USD"; // tu peux changer ou le passer en prop
+  const symbol_3 = "EUR/USD"; // tu peux changer ou le passer en prop
+  const symbol_4 = "GBP/USD"; // tu peux changer ou le passer en prop
+  const symbol_5 = "AAPL"; // tu peux changer ou le passer en prop
+  const symbol_6 = "MSFT"; // tu peux changer ou le passer en prop
 
-  const fetchData = async () => {
+  const fetchDatabtc = async () => {
     try {
-      const res = await fetch(`/api/finnhub?symbol=${symbol}`);
+      const res = await fetch(`/api/finnhub?symbol=${symbol_1}`);
       const json = await res.json();
+      console.log("Finnhub data:", json);
 
       // On crée un point simple (time + current price)
       const newPoint = {
@@ -33,16 +45,127 @@ const PredictionPage = () => {
         price: json.c, // "c" = current price selon Finnhub
       };
 
-      setData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+      setBtcData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
     } catch (err) {
       console.error("Erreur:", err);
     }
   };
 
+  const fetchDataEthUsd = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol_2}`);
+      const json = await res.json();
+      console.log("Finnhub data:", json);
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setEthData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+  const fetchDataEurUsd = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol_3}`);
+      const json = await res.json();
+      console.log("Finnhub data:", json);
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setEurData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+  const fetchDataGbpUsd = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol_4}`);
+      const json = await res.json();
+      console.log("Finnhub data:", json);
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setGbpData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+  const fetchDataAAPL = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol_5}`);
+      const json = await res.json();
+      console.log("Finnhub data:", json);
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setAaplData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+  const fetchDataMSFT = async () => {
+    try {
+      const res = await fetch(`/api/finnhub?symbol=${symbol_6}`);
+      const json = await res.json();
+      console.log("Finnhub data:", json);
+
+      // On crée un point simple (time + current price)
+      const newPoint = {
+        time: new Date().toLocaleTimeString(),
+        price: json.c, // "c" = current price selon Finnhub
+      };
+
+      setMsftData((prev) => [...prev.slice(-20), newPoint]); // garde les 20 derniers points
+    } catch (err) {
+      console.error("Erreur:", err);
+    }
+  };
+
+
   useEffect(() => {
-    fetchData(); // premier chargement
-    const interval = setInterval(fetchData, 30000); // recharge toutes les 30 secondes
-    return () => clearInterval(interval);
+    fetchDatabtc(); // premier chargement
+    fetchDataEthUsd();
+    fetchDataEurUsd();
+    fetchDataGbpUsd();
+    fetchDataAAPL();
+    fetchDataMSFT();
+
+
+    const interval_1 = setInterval(fetchDatabtc, 30000); // recharge toutes les 30 secondes
+    const interval_2 = setInterval(fetchDataEthUsd, 30000);
+    const interval_3 = setInterval(fetchDataEurUsd, 30000);
+    const interval_4 = setInterval(fetchDataGbpUsd, 30000);
+    const interval_5 = setInterval(fetchDataAAPL, 30000);
+    const interval_6 = setInterval(fetchDataMSFT, 30000);
+    
+    return () => {
+      clearInterval(interval_1);
+      clearInterval(interval_2);
+      clearInterval(interval_3);
+      clearInterval(interval_4);
+      clearInterval(interval_5);
+      clearInterval(interval_6);
+    };
   }, []);
 
   const today = new Date().toLocaleDateString(); // ex: 31/10/2025
@@ -90,16 +213,16 @@ const PredictionPage = () => {
         }}
       >
         <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
-          📈 Évolution du cours de {symbol} — {today}
+          📈 Évolution du cours de {symbol_1} — {today}
         </h2>
 
         <div className="w-full h-80">
           <ResponsiveContainer>
-            <LineChart data={data}>
+            <LineChart data={btcData}>
               <defs>
                 <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
                 </linearGradient>
               </defs>
 
@@ -118,7 +241,163 @@ const PredictionPage = () => {
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke="url(#colorPrice)"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
+      </div>
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol_2} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={ethData}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
+      </div>
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol_3} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={eurData}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
+      </div>
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol_4} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={gbpData}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#3b82f6"
                 strokeWidth={3}
                 dot={false}
                 isAnimationActive={true}
@@ -134,6 +413,111 @@ const PredictionPage = () => {
         </p>
       </div>
 
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol_5} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={aaplData}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
+      </div>
+
+      <div
+        className="relative p-4 rounded-2xl shadow-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(25,35,52,0.95) 100%)",
+          boxShadow: "0 0 25px rgba(59,130,246,0.15)",
+        }}
+      >
+        <h2 className="text-center text-sky-400 font-semibold mb-3 tracking-wide text-lg">
+          📈 Évolution du cours de {symbol_6} — {today}
+        </h2>
+
+        <div className="w-full h-80">
+          <ResponsiveContainer>
+            <LineChart data={msftData}>
+              <defs>
+                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="time" stroke="#9ca3af" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} domain={["auto", "auto"]} 
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(15,23,42,0.9)",
+                  border: "1px solid rgba(59,130,246,0.5)",
+                  borderRadius: "10px",
+                  color: "#f3f4f6",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={700}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-3">
+          Mise à jour automatique toutes les 30 s
+        </p>
+      </div>
       {/* Aperçus clés et analyse de scénario */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div className="bg-gradient-to-t from-[#141a29] to-[#1a2333] rounded-xl p-6 shadow-md">
