@@ -5,7 +5,7 @@ const Setting = () => {
     <main className="flex-1  md:p-12 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
     <div className="flex-1  text-gray-300 rounded-xl dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
       <section className="dark:bg-[#142636] rounded-xl p-6 shadow-md transition-colors duration-300 mb-6 bg-white ">
-        <h2 className="text-2xl font-bold dark:text-white text-gray-400 mb-4 border-b border-gray-700 pb-2">Paramètres du compte</h2>
+        <h2 className="text-2xl font-bold dark:text-white text-gray-700 mb-4 border-b border-gray-700 pb-2">Paramètres du compte</h2>
         <p className="text-gray-400 mb-6">
           Gérez les informations de votre profil, la sécurité, les préférences de notification et le thème de l'application.
         </p>
@@ -52,8 +52,8 @@ const Setting = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center text-black bg-[#F3F4F6] dark:bg-[#203445] p-4 rounded-lg">
               <div>
-                <p className="font-semibold text-black dark:text-gray-400">Changer le mot de passe</p>
-                <p className="text-sm text-black dark:text-gray-400">Maintenez votre compte en sécurité.</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-400">Changer le mot de passe</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Maintenez votre compte en sécurité.</p>
               </div>
               <button className="p-2 rounded-md border border-[#5686FE] text-[#5686FE] font-semibold hover:bg-[#081660] hover:text-white transition-colors">
                 Changer le mot de passe
@@ -61,8 +61,8 @@ const Setting = () => {
             </div>
             <div className="flex justify-between items-center  bg-[#F3F4F6] dark:bg-[#203445] p-4 rounded-lg">
               <div>
-                <p className="font-semibold text-black dark:text-gray-400">Authentification à deux facteurs</p>
-                <p className="text-sm text-black dark:text-gray-400">Ajoutez une couche de sécurité supplémentaire.</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-400">Authentification à deux facteurs</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Ajoutez une couche de sécurité supplémentaire.</p>
               </div>
               <button className="p-2 rounded-md bg-gray-600 text-gray-300 font-semibold hover:bg-gray-700 transition-colors">
                 Activer
@@ -82,8 +82,8 @@ const Setting = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center bg-[#F3F4F6] dark:bg-[#203445] p-4 rounded-lg">
               <div>
-                <p className="font-semibold text-black dark:text-gray-400">Mode sombre</p>
-                <p className="text-sm text-black dark:text-gray-400">Activez le mode sombre pour une meilleure lisibilité.</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-400">Mode sombre</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Activez le mode sombre pour une meilleure lisibilité.</p>
               </div>
               {/* Le bouton de bascule de thème doit être ajouté ici si vous le souhaitez */}
               <button className="p-2 rounded-full bg-gray-700 text-gray-200">
@@ -92,8 +92,8 @@ const Setting = () => {
             </div>
             <div className="flex justify-between items-center bg-[#F3F4F6] dark:bg-[#203445]  p-4 rounded-lg">
               <div>
-                <p className="font-semibold text-black dark:text-gray-400">Notifications par email</p>
-                <p className="text-sm text-black dark:text-gray-400">Recevez les mises à jour et les alertes importantes.</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-400">Notifications par email</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Recevez les mises à jour et les alertes importantes.</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" defaultChecked />

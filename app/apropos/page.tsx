@@ -33,23 +33,37 @@ const containerVariants = {
 };
   const router = useRouter();
   const [isExiting, setIsExiting] = useState(false);
+  const [isLoadingContent, setIsLoadingContent] = useState<boolean>(false);
 
   const handleLinkClick = (e) => {
     e.preventDefault(); // empêche le Link d'aller directement sur /accueil
     setIsExiting(true); // lance l’animation de disparition
 
     setTimeout(() => {
+      setIsLoadingContent(true);
       router.push("/accueil"); // 👈 redirection après la fin de l’animation
-    }, 800); 
+    }, 400); 
      }// durée de ton animation
-
+     
+     
+if (isLoadingContent) {
+    return (
+        // Classes Tailwind pour le centrage et la superposition
+        // fixed inset-0 : plein écran | z-50 : au-dessus de tout | bg-black/80 : fond noir semi-transparent
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            {/* Tailwind pour le Spinner */}
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white"></div>
+            <p className="text-xl font-bold ml-3 text-[#5686FE]">Chargement...</p>
+        </div>
+    );
+}
   return (
   <>
  <AnimatePresence mode="wait">
     {!isExiting && (
  
  
-    <motion.div className=" w-screen h-screen h-[90vh] border-2 border-[#8DABED] rounded-3xl p-6 lg:p-10
+    <motion.div className=" w-screen h-screen h-[90vh] border-2 border-[#8DABED] rounded-2xl p-6 lg:p-10
                 shadow-lg shadow-blue-500/50 backdrop-blur-sm bg-cover bg-center overflow-hidden
                 bg-[url('/tako.jpg')]"
                 variants={containerVariants} // ⬅️ Applique la logique de cascade

@@ -20,12 +20,14 @@ import { a } from 'framer-motion/client';
 const PredictionPage = () => {
   const [whatIfValue, setWhatIfValue] = useState(10);
   const [predictedRevenue, setPredictedRevenue] = useState(4500);
+
   const [btcData, setBtcData] = useState([]);
   const [ethData, setEthData] = useState([]);
   const [eurData, setEurData] = useState([]);
   const [gbpData, setGbpData] = useState([]);
   const [aaplData, setAaplData] = useState([]);
   const [msftData, setMsftData] = useState([]);
+  
   const symbol_1 = "BTC-USD"; // tu peux changer ou le passer en prop
   const symbol_2 = "ETH-USD"; // tu peux changer ou le passer en prop
   const symbol_3 = "EUR/USD"; // tu peux changer ou le passer en prop

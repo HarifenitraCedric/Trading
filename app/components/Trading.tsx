@@ -175,7 +175,7 @@ const TradingPage = () => {
                 {/* Type Achat/Vente */}
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-2">Choisir l'Action</label>
-                  <div className="flex rounded-lg bg-[#203445] p-1">
+                  <div className="flex rounded-lg bg-[#5686FE]/30 dark:bg-[#203445] p-1">
                     {['Achat', 'Vente'].map((type) => (
                       <button
                         key={type}
@@ -185,8 +185,8 @@ const TradingPage = () => {
                         }}
                         className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                           transactionType === type
-                            ? type === 'Achat' ? 'bg-[#5686FE] text-white shadow-md' : 'bg-red-600 text-white shadow-md'
-                            : 'text-gray-400 hover:bg-[#2e405a]'
+                            ? type === 'Achat' ? 'bg-[#5686FE]/80 text-white shadow-md' : 'bg-[#5686FE]/80  text-white shadow-md'
+                            : 'text-gray-500 hover:bg-[#5686FE]/30'
                         }`}
                       >
                         {type}
@@ -200,10 +200,10 @@ const TradingPage = () => {
                   <label className="block text-sm font-medium text-gray-400 mb-2">Sélectionner l'Actif</label>
                   <button
                     type="button"
-                    className="w-full flex justify-between items-center px-4 py-2 bg-[#203445] text-white rounded-lg shadow-sm border border-gray-600 hover:border-green-500 transition-colors"
+                    className="w-full flex justify-between items-center px-4 py-2 bg-[#5686FE]/30 dark:bg-[#203445] text-white rounded-lg shadow-sm border border-[#5686FE]/20 hover:border-[#5686FE]/70 transition-colors"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <span className="text-lg font-bold">{selectedAsset.icon} {selectedAsset.symbol}</span>
+                    <span className="text-lg text-gray-400 dark:text-white font-bold">{selectedAsset.icon} {selectedAsset.symbol}</span>
                     <ChevronDown size={20} className={`text-gray-400 transform transition-transform ${isDropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
                   </button>
                   {isDropdownOpen && (
@@ -229,13 +229,13 @@ const TradingPage = () => {
 
             {/* Formulaire Quantité */}
             <div className={`${cardClasses}`}>
-              <h2 className="text-xl font-semibold text-white mb-4">Détails de l'Ordre</h2>
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-white mb-4">Détails de l'Ordre</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="quantity" className="block text-sm font-medium text-gray-400 mb-2">
                     Quantité de {selectedAsset.symbol}
                   </label>
-                  <div className="flex rounded-lg overflow-hidden border border-gray-600 focus-within:ring-2 focus-within:ring-green-500 transition-shadow">
+                  <div className="flex rounded-lg overflow-hidden border border-[#5686FE]/20 focus-within:ring-2 focus-within:ring-[#5686FE]/40 transition-shadow">
                     <input
                       id="quantity"
                       type="number"
@@ -245,7 +245,7 @@ const TradingPage = () => {
                       value={quantity}
               
                       onChange={(e) => setQuantity(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#203445] text-white placeholder-gray-500 focus:outline-none"
+                      className="w-full px-4 py-3 bg-[#5686FE]/30 dark:bg-[#203445] text-gray-600 dark:text-white placeholder-gray-500 focus:outline-none"
                     />
                     <span className="p-3 bg-[#2e405a] text-gray-300 font-semibold border-l border-gray-600">
                       {selectedAsset.symbol}
@@ -264,7 +264,7 @@ const TradingPage = () => {
                   type="submit"
                   disabled={!isOrderValid}
                   className={`w-full py-3 rounded-lg shadow-lg text-lg font-bold transition-all flex items-center justify-center space-x-2 ${
-                    isOrderValid ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                    isOrderValid ? 'bg-[#5686FE]/70 text-white hover:bg-[#5686FE]/90' : 'bg-[#5686FE]/30 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
                   }`}
                 >
                   <ArrowUpRight size={20} />

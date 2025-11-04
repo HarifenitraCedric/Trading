@@ -17,6 +17,9 @@ import TradingPage from '../components/Trading';
 import TauxDeChange from '../components/Market';
 import WalletPage from '../components/Wallet';
 import HistoryPage from '../components/Test';
+import Chat from '../components/Chat';
+import {Loader } from 'lucide-react';
+
 // NOTE : Il n'est pas nécessaire d'importer prisma ici car c'est un composant client.
 // L'import 'prisma' est une erreur courante dans les composants client.
 
@@ -35,6 +38,7 @@ export default function Home() {
 
   const [theme, setTheme] = useState('light'); 
   const [activePage, setActivePage] = useState("Dashboard");
+  const [error, setError] = useState<string | null>(null);
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
@@ -44,11 +48,18 @@ export default function Home() {
       main.scrollTo({ top: 0, behavior: "smooth" }); 
     }
   }, [activePage]);
+  
+ const displayOverride = isLoading 
+            ? <span className="text-3xl text-gray-500 flex items-center"><Loader className="animate-spin mr-3" size={32} /> Chargement...</span> 
+            : error 
+                ? <span className="text-3xl text-red-500">Erreur de données</span>
+                : null;
 
 
 
   return (
     <>
+    
       <Head>
         <title>App Dashboard</title>
       </Head>
@@ -76,6 +87,7 @@ export default function Home() {
             {activePage === "Market" && <TauxDeChange />}
             {activePage === "Wallet" && <WalletPage />}
             {activePage === "Test" && <HistoryPage />}
+            {activePage === "ChatBoot" && <Chat/>}
           </main>
         </motion.div>
       </div>

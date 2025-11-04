@@ -134,6 +134,10 @@ const Profil = () => {
                 <FaInfoCircle  className="text-blue-500 text-xl" />
                 <p className="text-sm  text-gray-700 dark:text-gray-100">{user.bio}</p>
               </div>
+              <div className="flex items-center gap-3 mt-2">
+                <FaInfoCircle  className="text-blue-500 text-xl" />
+                <p className="text-sm  text-gray-700 dark:text-gray-100">{user.bio}</p>
+              </div>
             </div>
           </motion.div>
         </motion.section>
@@ -142,9 +146,9 @@ const Profil = () => {
         <motion.section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8" variants={containerVariants}
       initial="initial"
       animate="animate">
-          <motion.div className="bg-[#142636] p-6  border border-[#5686FE]/20 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+          <motion.div className="bg-white dark:bg-[#142636] p-6  border border-[#5686FE]/20 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
             <span className=" font-bold text-lg text-[#5686FE]">Total des fonds</span>
-            <p className="text-3xl font-bold text-white my-2"><CountUp
+            <p className="text-3xl font-bold text-gray-700 dark:text-white my-2"><CountUp
                 start={0}
                 end={
                   parseFloat(
@@ -163,9 +167,9 @@ const Profil = () => {
               />
 </p>
           </motion.div>
-          <motion.div className="bg-[#142636] border border-[#5686FE]/20 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+          <motion.div className="bg-white dark:bg-[#142636] border border-[#5686FE]/20 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
             <span className=" font-bold text-lg text-[#5686FE]">Volume de trading</span>
-            <p className="text-3xl font-bold text-white my-2">
+            <p className="text-3xl font-bold text-gray-700 dark:text-white my-2">
               <CountUp
                 start={0}
                 end={
@@ -183,11 +187,12 @@ const Profil = () => {
                   (String(user.stats.tradingVolume).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
                 }
               />
+              EUR
             </p>
           </motion.div>
-          <motion.div className="bg-[#142636] border border-gray-700 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
+          <motion.div className="bg-white dark:bg-[#142636] border border-[#5686FE]/30 p-6 rounded-xl flex flex-col justify-between shadow-md transition-colors duration-300 dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
             <span className=" font-bold text-lg text-[#5686FE]">Transactions</span>
-            <p className="text-3xl font-bold text-white my-2">
+            <p className="text-3xl font-bold text-gray-700 dark:text-white my-2">
               <CountUp
                 start={0}
                 end={
