@@ -1,10 +1,11 @@
 
 import { generateResponse } from "@/app/lib/ai";
+import { UIMessage } from "ai";
 
 export async function POST(req:Request){
-    const body = await req.json();
+    const {messages}: { messages: UIMessage[] } = await req.json();
 
-    const resGenerated = await generateResponse(body.text);
+    const resGenerated = await generateResponse(messages);
 
-    return Response.json(resGenerated.candidates); // This is in a form of array, test to see the output
+    return resGenerated.toUIMessageStreamResponse(); // This is in a form of array, test to see the output
 }
