@@ -11,7 +11,7 @@
     "migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "@ai-sdk/google": "^2.0.24",
+    "@ai-sdk/google": "^2.0.28",
     "@ai-sdk/react": "^2.0.81",
     "@google/genai": "^1.27.0",
     "@prisma/client": "^6.16.3",
