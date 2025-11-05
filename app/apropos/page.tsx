@@ -77,7 +77,14 @@ if (isLoadingContent) {
       animate="animate"
       exit="exit">
       <motion.div className="flex items-center space-x-2" variants={itemVariants}>
-        <div className="w-8 h-8 bg-[#5686FE] rounded-full flex items-center justify-center text-black font-bold text-sm">C</div>
+        <div className="w-14 h-14 bg-[#5686FE] rounded-full ">
+          <motion.img 
+            src="/log.ico" 
+            alt="Dollar" 
+            className="w-14 h-14 object-contain rounded-full" 
+            variants={itemVariants}
+             />
+        </div>
         <span className="text-white text-xl font-bold tracking-wider">PREDICTINVEST</span>
       </motion.div>
       <motion.nav className="hidden lg:flex space-x-6 text-gray-300 font-medium" variants={itemVariants}>
@@ -91,7 +98,7 @@ if (isLoadingContent) {
           <span>ACCUEIL</span>
         </Link>
         <Link
-          href="/"
+          href="/accueil"
           className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 
                     hover:bg-[#5686FE]/20 hover:border-[#5686FE] hover:text-[#5686FE] 
                     transition-all duration-300"
@@ -99,7 +106,7 @@ if (isLoadingContent) {
           <span>PREDICTION</span>
         </Link>
         <Link
-          href="/"
+          href="/accueil"
           className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 
                     hover:bg-[#5686FE]/20 hover:border-[#5686FE] hover:text-[#5686FE] 
                     transition-all duration-300"
@@ -107,7 +114,7 @@ if (isLoadingContent) {
           <span>TABLEAU DE BORD</span>
         </Link>
         <Link
-          href="/"
+          href="/accueil"
           className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 
                     hover:bg-[#5686FE]/20 hover:border-[#5686FE] hover:text-[#5686FE] 
                     transition-all duration-300"
@@ -117,7 +124,7 @@ if (isLoadingContent) {
         </Link>
       </motion.nav>
 
-      <button className="px-5 py-2 bg-[#12328B] text-white rounded-full hover:bg-[#081660]">
+      <button className="text-sm px-15 py-2 bg-[#12328B] text-white rounded-xl hover:bg-[#081660] ">
         CONNECT WALLET
       </button>
     </motion.header>

@@ -128,94 +128,93 @@ const totalValue = mockData.reduce((sum, item) => sum + item.value, 0);
 
     return (
         <motion.div 
-            className="bg-white dark:bg-[#142636] p-6 rounded-2xl shadow-lg w-full h-full flex flex-col"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+  className="bg-white dark:bg-[#142636] mt-2 rounded-2xl shadow-lg w-full flex flex-col"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+>
+  <h2 className="text-xl font-bold text-center text-[#5686FE] underline decoration-current">
+    Allocation d'Actifs :
+  </h2>
+
+  {/* CONTAINER PRINCIPAL FLEX — responsive */}
+  <div className="flex flex-col lg:flex-row items-center justify-between w-full">
+    
+    {/* SECTION GRAPHIQUE (haut sur mobile, gauche sur bureau) */}
+    <div 
+      className="relative w-full sm:w-3/4 md:w-2/3 lg:w-1/2 flex justify-center items-center "
+      onMouseLeave={handleMouseLeave}
+    >
+      <ResponsiveContainer width="100%" height={250}>
+        <PieChart>
+          <Pie
+            data={mockData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%" 
+            cy="50%" 
+            innerRadius={60} 
+            outerRadius={90}
+            paddingAngle={3}
+            onMouseEnter={handleMouseEnter}
+          >
+            {mockData.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.color} 
+                style={{ 
+                  opacity: activeIndex === index || activeIndex === -1 ? 1 : 0.4,
+                  transition: 'opacity 0.2s'
+                }}
+              />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+        </PieChart>
+      </ResponsiveContainer>
+
+      {/* Total au centre du graphique */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+        <p className="text-sm text-gray-500 dark:text-white font-medium">Portefeuille</p>
+        <p className="text-xl font-extrabold text-gray-900 dark:text-white">{formattedTotal}</p>
+      </div>
+    </div>
+
+    {/* SECTION LÉGENDE (bas sur mobile, droite sur bureau) */}
+    <div className="w-full lg:w-1/2 flex flex-col gap-3">
+      {mockData.map((entry, index) => (
+        <motion.div 
+          key={entry.name}
+          className="flex justify-between items-center p-1 rounded-lg cursor-pointer transition-all duration-200"
+          style={{ 
+            backgroundColor: activeIndex === index ? entry.color + '15' : 'transparent',
+            border: activeIndex === index ? `1px solid ${entry.color}70` : '1px solid transparent',
+          }}
+          onMouseEnter={() => handleMouseEnter(null, index)}
+          onMouseLeave={handleMouseLeave}
         >
-            <h2 className="text-xl font-bold text-center text-[#5686FE]  mb-0">Allocation d'Actifs</h2>
-            
-            {/* CONTAINER PRINCIPAL FLEX : Diagramme à gauche, Légende et Total à droite */}
-            <div className="flex-grow w-full flex flex-col items-center lg:flex-row lg:justify-center">
-                
-                {/* 4.1. SECTION DU GRAPHIQUE (LEFT/TOP) */}
-                <div 
-                    className="w-full h-60 lg:w-1/2 lg:h-full relative flex items-center justify-center"
-                    onMouseLeave={handleMouseLeave}
-                >
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie
-                                data={mockData}
-                                dataKey="value"
-                                nameKey="name"
-                                cx="50%" 
-                                cy="50%" 
-                                innerRadius={60} 
-                                outerRadius={95} 
-                                paddingAngle={3}
-                                onMouseEnter={handleMouseEnter} // Gère le survol sur le graphique
-                            >
-                                {mockData.map((entry, index) => (
-                                    <Cell 
-                                        key={`cell-${index}`} 
-                                        fill={entry.color} 
-                                        // Animation au survol
-                                        style={{ 
-                                            opacity: activeIndex === index || activeIndex === -1 ? 1 : 0.4,
-                                            transition: 'opacity 0.2s'
-                                        }}
-                                    />
-                                ))}
-                            </Pie>
-                            <Tooltip content={<CustomTooltip />} />
-                        </PieChart>
-                    </ResponsiveContainer>
-
-                    {/* Total affiché au centre */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                        <p className="text-sm text-gray-500 dark:text-white font-medium">Portefeuille</p>
-                        <p className="text-xl font-extrabold text-gray-900 dark:text-white">{formattedTotal}</p>
-                    </div>
-                </div>
-
-                {/* 4.2. SECTION LÉGENDE ET DESCRIPTION (RIGHT/BOTTOM) */}
-                <div className="w-full lg:w-1/2 mt-4 lg:mt-0 lg:pl-6">
-                    
-                    <div className="space-y-2">
-                        {mockData.map((entry, index) => (
-                            <motion.div 
-                                key={entry.name}
-                                className="flex justify-between items-center p-0 rounded-lg cursor-pointer"
-                                style={{ 
-                                    backgroundColor: activeIndex === index ? entry.color + '15' : 'transparent',
-                                    border: activeIndex === index ? `1px solid ${entry.color}70` : '1px solid transparent',
-                                }}
-                                onMouseEnter={() => handleMouseEnter(null, index)} // Gère le survol sur la légende
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <div className="flex items-center">
-                                    {/* Petit cercle de couleur */}
-                                    <span 
-                                        className="w-3 h-3 rounded-full mr-3" 
-                                        style={{ backgroundColor: entry.color }}
-                                    ></span>
-                                    <span className="font-medium dark:text-gray-300 text-gray-800">{entry.name}</span>
-                                </div>
-                                
-                                {/* Pourcentage et Valeur */}
-                                <div className="text-right">
-                                    <span className="font-bold dark:text-gray-400 text-gray-800">{entry.percentage.toFixed(1)}%</span>
-                                    <span className="ml-2 text-sm text-gray-500">({entry.value.toLocaleString()} €)</span>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {/* Bloc du total en bas (Déjà inclus au centre du graphique, mais peut être déplacé ici si préféré) */}
-                </div>
-            </div>
+          <div className="flex items-center">
+            <span 
+              className="w-3 h-3 rounded-full mr-3" 
+              style={{ backgroundColor: entry.color }}
+            ></span>
+            <span className="font-medium dark:text-gray-300 text-gray-800">
+              {entry.name}
+            </span>
+          </div>
+          <div className="text-right">
+            <span className="font-bold dark:text-gray-400 text-gray-800">
+              {entry.percentage.toFixed(1)}%
+            </span>
+            <span className="ml-2 text-sm text-gray-500">
+              ({entry.value.toLocaleString()} €)
+            </span>
+          </div>
         </motion.div>
+      ))}
+    </div>
+  </div>
+</motion.div>
     );
 };
 

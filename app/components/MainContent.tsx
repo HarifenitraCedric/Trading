@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 import LineChart from './LineChart';
 import { motion } from "framer-motion";
 import { itemVariants,  containerVariants} from "../lib/Fonction";
-import { DollarSign, ArrowUp, Bitcoin, TrendingUp, Repeat2 } from 'lucide-react'; 
+import { DollarSign, ArrowUp, Bitcoin, TrendingUp, Repeat2,PlusCircle, MinusCircle} from 'lucide-react'; 
 import { useState, useEffect } from 'react';
 import CountUp from "react-countup";
 import AllocationChart from './Allocation';
@@ -241,17 +241,17 @@ const MainContent = () => {
         </motion.div>
     ))}
   </motion.section>
-    <motion.div className="h-full flex flex-col lg:flex-row gap-4 " variants={containerVariants}
+    <motion.div className=" flex flex-col lg:flex-row gap-4 " variants={containerVariants}
     initial="initial"
     animate="animate">
 
     {/* Première section : Bienvenue et les boutons */}
-    <motion.section className="w-full lg:w-3/5 h-full" variants={containerVariants}>
-    <div className="dark:bg-white bg-[#142636] rounded-xl flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-8 
+    <motion.section className="w-full lg:w-3/5" variants={containerVariants}>
+    <div className="dark:bg-white bg-[#142636] rounded-xl flex flex-col lg:flex-row items-start lg:items-center space-y-2 lg:space-y-0 lg:space-x-8 
     transition-shadow duration-100 shadow-[0_0_5px_2px_rgba(0,0,0,0.2)]">
         <div className="w-full flex-grow">
           {/* Simulation du graphique */}
-          <div className="w-full h-80 bg-white rounded-xl border border-[#5686FE]/20 flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
+          <div className="w-full   bg-white rounded-xl border border-[#5686FE]/20 flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
             <AllocationChart/>
           </div>
         </div>
@@ -260,16 +260,25 @@ const MainContent = () => {
     </motion.section>
   
       {/* Deuxième section : Balance et graphique */}
-      <motion.section className="w-full lg:w-2/5 h-full"  variants={containerVariants}
+      <motion.section className="w-full lg:w-2/5"  variants={containerVariants}
     initial="initial"
     animate="animate">
-        <motion.div className="bg-[#142636] rounded-xl flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-8" variants={containerVariants}>
+        <motion.div className="bg-[#142636] rounded-xl flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-8
+         transition-shadow duration-100 shadow-[0_0_5px_2px_rgba(0,0,0,0.2)] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]" variants={containerVariants}>
           
           <div className="w-full">
             {/* Simulation du graphique */}
-            <div className="w-full h-80 bg-white rounded-lg border border-[#5686FE]/20 flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
-              Graphique de  sèrie
-              <LineChart />
+            <div className="w-full p-8 bg-white rounded-xl border border-[#5686FE]/20 flex items-center justify-center text-sm text-gray-400 dark:bg-[#142636] dark:shadow-[0_0_20px_5px_rgba(0,0,0,0.6)]">
+              
+                <div className="flex flex-col space-y-4 md:w-56">  
+                  <h2 className="text-[#5686FE] text-center font-bold text-lg">Action Rapide</h2>      
+                    <button className="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-[1.01]">
+                        <PlusCircle size={24} className="mr-2" /> Déposer des Fonds
+                    </button>
+                    <button className="w-full bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-300 transition duration-300 transform hover:scale-[1.01]">
+                        <MinusCircle size={24} className="mr-2" /> Retirer des Fonds                           
+                    </button>
+                </div>
             </div>
           </div>
         </motion.div>
@@ -279,38 +288,38 @@ const MainContent = () => {
 
       {/* Tableau des tokens */}
     <div className="grid grid-cols-3 gap-4">
-      <div className="bg-[#142636] col-span-2 bg-gray-800 rounded-xl p-6 shadow-md border border-[#5686FE]/20">
-        <h3 className="text-xl font-bold text-gray-100 mb-4 border-b border-gray-700 pb-2">Activité récente</h3>
+      <div className="bg-white dark:bg-[#142636] col-span-2 bg-gray-800 rounded-xl p-6 shadow-md border border-[#5686FE]/20">
+        <h3 className="text-xl font-bold text-[#5686FE] mb-4 border-b border-gray-700 pb-2">Fil d'Actualité</h3>
         <div className="space-y-4">
-          <div className="p-3 bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
+          <div className="p-3 bg-gray-200 dark:bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
             <div className="flex items-center">
               <span className="mr-3 text-lg text-green-400">🛒</span>
               <div>
-                <p className="text-gray-200 font-semibold">Nouvelle commande #456789</p>
-                <p className="text-sm text-gray-400">Client: Marie Dupond</p>
+                <p className="text-gray-600 dark:text-gray-200 font-semibold">Decision  imminente de la FED</p>
+                <p className="text-sm text-gray-400">il y a 1 sem</p>
               </div>
             </div>
-            <span className="text-sm font-semibold text-green-400">+$125.00</span>
+            <span className="text-sm font-semibold text-gray-400">il y a 3 sem</span>
           </div>
-          <div className="p-3 bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
+          <div className="p-3 bg-gray-200 dark:bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
             <div className="flex items-center">
-              <span className="mr-3 text-lg text-red-400">❌</span>
+              <span className="mr-3 text-lg text-reds-400">❌</span>
               <div>
-                <p className="text-gray-200 font-semibold">Remboursement traité</p>
-                <p className="text-sm text-gray-400">Commande: #456788</p>
+                <p className="text-gray-600 dark:text-gray-200 font-semibold">L'Euro se stabilise face au MGA </p>
+                <p className="text-sm text-gray-400">Dévice</p>
               </div>
             </div>
-            <span className="text-sm font-semibold text-red-400">-$35.50</span>
+            <span className="text-sm font-semibold text-gray-400">il y a 1 sem</span>
           </div>
-          <div className="p-3 bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
+          <div className="p-3 bg-gray-200 dark:bg-[#203445] rounded-md flex justify-between items-center hover:bg-[#2c4056] transition-colors">
             <div className="flex items-center">
               <span className="mr-3 text-lg text-yellow-400">📝</span>
               <div>
-                <p className="text-gray-200 font-semibold">Article mis à jour</p>
-                <p className="text-sm text-gray-400">"Chaussures de running"</p>
+                <p className="text-gray-600 dark:text-gray-200 font-semibold">Pétrole et la plupart des actifs financiers les plus tradés</p>
+                <p className="text-sm text-green-400">New</p>
               </div>
             </div>
-            <span className="text-sm text-gray-400">il y a 2h</span>
+            <span className="text-sm font-semibold text-gray-400">il y a 2 j</span>
           </div>
         </div>
       </div>

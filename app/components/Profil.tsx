@@ -5,10 +5,19 @@ import { itemVariants,  containerVariants} from "../lib/Fonction";
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
 import { FaEnvelope, FaHome, FaPhone, FaInfoCircle, FaFileAlt } from 'react-icons/fa';
-
+import {  Zap, 
+    Shield, Settings, Lock, Bell 
+} from 'lucide-react'; 
 
 const Profil = () => {
  
+  const SettingButton = ({ label, icon: Icon, action = "Gérer" }) => (
+    <button className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-[#1A2E40] border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-[#5686FE] hover:text-white dark:hover:bg-[#456ceb] transition-all duration-200 group text-center">
+        <Icon className="w-6 h-6 text-[#5686FE] group-hover:text-white transition-colors" />
+        <span className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-white transition-colors">{label}</span>
+        <span className="text-xs text-[#5686FE] group-hover:text-white transition-colors italic mt-1">{action}</span>
+    </button>
+);
 
   const user = {
     name: "Ragnar Lodbrok",
@@ -212,33 +221,23 @@ const Profil = () => {
         </motion.section>
 
         {/* Recent Transactions Table */}
-        <motion.section className="bg-[#142636] rounded-xl p-6 shadow-md transition-colors duration-300 border border-gray-700"
-        variants={containerVariants}
-      initial="initial"
-      animate="animate">
-          <motion.h3 className="text-xl font-bold text-gray-100 mb-4" variants={containerVariants}>Transactions récentes</motion.h3>
-          <motion.div className="overflow-x-auto" variants={containerVariants}>
-            <motion.table className="min-w-full" variants={containerVariants}>
-              <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="py-2 text-left text-gray-400 font-medium">Date</th>
-                  <th className="py-2 text-left text-gray-400 font-medium">Type</th>
-                  <th className="py-2 text-left text-gray-400 font-medium">Token</th>
-                  <th className="py-2 text-left text-gray-400 font-medium">Montant</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTransactions.map((tx) => (
-                  <tr key={tx.id} className="border-b border-gray-700 hover:bg-[#203445] transition-colors">
-                    <td className="py-4 whitespace-nowrap text-gray-300">{tx.date}</td>
-                    <td className="py-4 whitespace-nowrap text-gray-300">{tx.type}</td>
-                    <td className="py-4 whitespace-nowrap text-[#5686FE]">{tx.token}</td>
-                    <td className="py-4 whitespace-nowrap text-white">{tx.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </motion.table>
-          </motion.div>
+            <motion.section className="bg-[#142636] rounded-xl  transition-colors duration-300 border border-[#5686FE]/30"
+              variants={containerVariants}
+              initial="initial"
+              animate="animate">
+                <motion.section 
+                      className="bg-white dark:bg-[#142636] rounded-xl  p-6 shadow-xl" 
+                      variants={itemVariants}
+                  >
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2"><Settings className='w-6 h-6 text-[#5686FE]'/> Réglages Rapides</h3>
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <SettingButton label="Changer Mot de Passe" icon={Lock} action="Sécurité" />
+                        <SettingButton label="Activer 2FA" icon={Zap} action="Sécurité" />
+                        <SettingButton label="Gestion des Alertes" icon={Bell} action="Préférences" />
+                        <SettingButton label="Niveau KYC" icon={Shield} action="Mettre à Jour" />
+                    </div>
+                </motion.section>
         </motion.section>
       </motion.div>
     </motion.div>
