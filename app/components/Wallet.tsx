@@ -156,6 +156,7 @@ const WalletPage = () => {
             ? `${wallet.cash.balance.toFixed(2)} ${wallet.cash.currency}`
             : "Invité / Données indisponibles";
     const cashBalance = wallet?.cash.balance ?? 0;
+    const cryptoBalance = wallet?.crypto.balance ?? 0;
     const [selectedCurrency, setSelectedCurrency] = useState('EUR');
 
     const [displayAmount, setDisplayAmount] = useState(cashBalance);
@@ -251,17 +252,67 @@ const WalletPage = () => {
                 </div>
             </div>
        {/* Détail des Soldes d'Actifs */}
-                    <h2 className="text-2xl font-bold text-[#5686FE] mb-6 flex items-center">
-                        <Briefcase size={24} className="mr-2 text-[#5686FE]" /> Soldes par Devise/Actif
-                    </h2>
+                <h2 className="text-2xl font-bold text-[#5686FE] mb-6 flex items-center">
+                    <Briefcase size={24} className="mr-2 text-[#5686FE]" /> Soldes par Devise/Actif
+                </h2>
+            <div className="flex flex-wrap justify-between gap-4 w-full mt-6 ">
+                     {/* BTC */}
+                <div className="flex-1 min-w-[120px] bg-[#5686FE]/30 dark:bg-[#1a2333] text-white p-4 rounded-xl shadow-md flex flex-col items-center border border-[#5686FE]/50">
+                    <span className="text-xl  dark:text-gray-300 text-gray-700">Bitcoin (BTC)</span>
+                    <span className="text-xl font-semibold mt-2">
+                    <CountUp
+                start={0}
+                end={
+                  parseFloat(
+                    String(cryptoBalance)
+                      .replace(",", ".") // remplace la virgule par un point
+                      .match(/[\d.]+/)?.[0] || "0" // extrait juste les chiffres
+                  )
+                }
+                duration={2.5}
+                decimals={4}
+                separator=","
+                suffix={
+                  " " +
+                  (String(cryptoBalance).match(/[a-zA-Z]+$/)?.[0] || "") // récupère l’unité à la fin (ex: EUR)
+                }
+              />
+                    </span>
+                </div>
+
+                {/* Ethereum */}
+                <div className="flex-1 min-w-[120px] bg-[#5686FE]/30 dark:bg-[#1a2333] text-white p-4 rounded-xl shadow-md flex flex-col items-center border border-[#5686FE]/50">
+                    <span className="text-xl dark:text-gray-300 text-gray-700">Ethereum (ETH)</span>
+                    <span className="text-xl font-semibold mt-2">
+                        <CountUp 
+                        start={0}
+                        end={50}
+                        duration={2.5}
+                        decimals={4}
+                        />
+                    </span>
+                </div>
+
+                {/* Solana */}
+                <div className="flex-1 min-w-[120px] bg-[#5686FE]/30 dark:bg-[#1a2333] text-white p-4 rounded-xl shadow-md flex flex-col items-center border border-[#5686FE]/50">
+                    <span className="text-xl dark:text-gray-300 text-gray-700">Solana (SOL)</span>
+                    <span className="text-xl font-semibold mt-2">
+                         <CountUp 
+                        start={0}
+                        end={30}
+                        duration={2.5}
+                        decimals={4}
+                        />
+                    </span>
+                </div>
+                </div>
+                <br />
 
                     {/* Historique des transact */}
-                    <div className="mt-12 p-6 bg-[#5686FE]/40 dark:bg-[#1a2333] rounded-xl border border-[#5686FE]/50">
-                        <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-4 flex items-center">
-                            <Clock size={24} className="mr-2 text-gray-500" /> Historique des transact Récemment
+                    <h2 className="text-2xl font-bold text-[#5686FE] mb-4 flex items-center">
+                            <Clock size={24} className="mr-2 text-[#5686FE]" /> Historique des transact Récemment
                         </h2>
- 
-
+                    <div className="mt-7 p-6 bg-[#5686FE]/40 dark:bg-[#1a2333] rounded-xl border border-[#5686FE]/50">
                         <table className="w-full border-separate bg-white  dark:bg-[#1a2333] border-spacing-0">
                             <thead className="w-full ">
                                 {/* En-tête Desktop */}
